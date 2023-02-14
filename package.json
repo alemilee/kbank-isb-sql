@@ -14,16 +14,172 @@
   "activationEvents": [
     "onLanguage:json",
 	"onLanguage:jsonc",
-	"onCommand:kbank-isb-sql.helloWorld"
+	"onCommand:kbank-isb-sql.helloWorld",
+	"onCommand:getting-started-sample.runCommand",
+	"onCommand:getting-started-sample.changeSetting",
+	"onCommand:getting-started-sample.setContext",
+	"onCommand:getting-started-sample.sayHello",
+	"onCommand:getting-started-sample.viewSources",
+	"onCommand:samples.quickInput"	
   ],
   "main": "./out/extension.js",
   "contributes": {
+	"walkthroughs": [
+		      {
+        "id": "sample",
+        "title": "Sample",
+        "description": "A sample walkthrough",
+        "steps": [
+         {
+						"id": "runcommand",
+						"title": "Run Command",
+						"description": "This step will run a command and check off once it has been run.\n[Run Command](command:getting-started-sample.runCommand)",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						},
+						"completionEvents": [
+							"onCommand:getting-started-sample.runCommand"
+						]
+					},
+					{
+						"id": "changesetting",
+						"title": "Change Setting",
+						"description": "This step will change a setting and check off when the setting has changed\n[Change Setting](command:getting-started-sample.changeSetting)",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						},
+						"completionEvents": [
+							"onSettingChanged:getting-started-sample.sampleSetting"
+						]
+					},
+					{
+						"id": "setcontext",
+						"title": "Set Context",
+						"description": "This step will set a context key, and check off when that context has been set\n[Set Context](command:getting-started-sample.setContext)",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						},
+						"completionEvents": [
+							"onContext:gettingStartedContextKey"
+						]
+					},
+					{
+						"id": "install python extension",
+						"title": "Install Python Extension",
+						"description": "Click here to install the Python Extension. This step will complete once it has been installed.\n[Here](command:workbench.extensions.installExtension?%22ms-python.python%22)",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						},
+						"completionEvents": [
+							"extensionInstalled:ms-python.python"
+						]
+					},
+					{
+						"id": "open terminal view",
+						"title": "Open Terminal",
+						"description": "Click [here](command:workbench.action.terminal.toggleTerminal) to open terminal. This step will complete once the terminal has been opened.",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						},
+						"completionEvents": [
+							"onView:terminal"
+						]
+					},
+					{
+						"id": "usesvg",
+						"title": "Use SVG's",
+						"description": "Try out using SVG's in your content, they can react to the theme (try: ``var(--vscode-foreground)``) and even host command links (try: ``xlink:href=\"command:``)",
+						"media": {
+							"svg": "resources/media/image.svg",
+							"altText": "Empty svg image"
+						}
+					},
+					{
+						"id": "mac",
+						"title": "UI Platform: Mac",
+						"description": "This step will only show on a Mac.",
+						"when": "isMac",
+						"media": {
+							"markdown": "resources/media/mac.md"
+						}
+					},
+					{
+						"id": "windows",
+						"title": "UI Platform: Windows",
+						"description": "This step will only show on Windows",
+						"when": "isWindows",
+						"media": {
+							"markdown": "resources/media/windows.md"
+						}
+					},
+					{
+						"id": "linux",
+						"title": "UI Platform: Linux",
+						"description": "This step will only show on Linux",
+						"when": "isLinux",
+						"media": {
+							"markdown": "resources/media/linux.md"
+						}
+					},
+					{
+						"id": "macRemote",
+						"title": "Workspace Platform: Mac",
+						"description": "This step will only show on Mac remotes.",
+						"when": "workspacePlatform == 'mac'",
+						"media": {
+							"markdown": "resources/media/mac.md"
+						}
+					},
+					{
+						"id": "windowsRemote",
+						"title": "Workspace Platform: Windows",
+						"description": "This step will only show on Windows remotes",
+						"when": "workspacePlatform == 'windows'",
+						"media": {
+							"markdown": "resources/media/windows.md"
+						}
+					},
+					{
+						"id": "linuxRemote",
+						"title": "Workspace Platform: Linux",
+						"description": "This step will only show on Linux remotes",
+						"when": "workspacePlatform == 'linux'",
+						"media": {
+							"markdown": "resources/media/linux.md"
+						}
+					},
+					{
+						"id": "webRemote",
+						"title": "Workspace Platform: Web",
+						"description": "This step will only show on webworker remotes",
+						"when": "workspacePlatform == 'webworker'",
+						"media": {
+							"markdown": "resources/media/linux.md"
+						}
+					},
+					{
+						"id": "showSources",
+						"title": "View Sources",
+						"description": "Open a folder containg the sources of this extension.\n[View Sources](command:getting-started-sample.viewSources)",
+						"media": {
+							"image": "resources/media/image.png",
+							"altText": "Empty image"
+						}
+					}
+        ]
+      }
+	],
     "viewsContainers": {
       "activitybar": [
         {
             "id": "package-explorer",
 			"title": "Package Explorer",
-			"icon": "media/dep.svg"
+			"icon": "resources/media/dep.svg"
         }
       ]
     },
@@ -32,7 +188,7 @@
         {
           "id": "nodeDependencies",
           "name": "Node Dependencies",
-          "icon": "media/dep.svg",
+          "icon": "resources/media/dep.svg",
           "contextualTitle": "Package Explorer"
         },
 		{
@@ -63,8 +219,17 @@
     },
     "commands": [
 			{
+				"command": "samples.quickInput",
+				"title": "Quick Input Samples"
+			},
+			{
 				"command": "kbank-isb-sql.helloWorld",
 				"title": "Hello World"
+			},
+			{
+				"title": "Getting Started Sample: Say Hello",
+				"shortTitle": "Say Hello (This is the name used in the New File quick pick)",
+				"command": "getting-started-sample.sayHello"
 			},
       		{
 				"command": "nodeDependencies.refreshEntry",
@@ -153,6 +318,11 @@
 					"command": "ftpExplorer.revealResource"
 				}
 			],
+			"file/newFile": [
+				{
+					"command": "getting-started-sample.sayHello"
+				}
+			],
 			"view/title": [
 				{
 					"command": "nodeDependencies.refreshEntry",
@@ -206,11 +376,15 @@
 		},
 		"configuration": [
 			{
-				"title": "JSON Outline",
+				"title": "kbank vscode tools",
 				"properties": {
 					"jsonOutline.autorefresh": {
 						"type": "boolean",
 						"default": false
+					},
+					"getting-started-sample.sampleSetting": {
+					"description": "Sample setting",
+					"type": "boolean"
 					}
 				}
 			}

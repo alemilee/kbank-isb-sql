@@ -2,14 +2,17 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import { DepNodeProvider, Dependency } from './nodeDependencies';
-import { JsonOutlineProvider } from './jsonOutline';
-import { FtpExplorer } from './ftpExplorer';
-import { FileExplorer } from './fileExplorer';
-import { TestViewDragAndDrop } from './testViewDragAndDrop';
-import { TestView } from './testView';
+import { DepNodeProvider, Dependency } from './views/exploer/nodeDependencies';
+import { JsonOutlineProvider } from './views/exploer/jsonOutline';
+import { FtpExplorer } from './views/exploer/ftpExplorer';
+import { FileExplorer } from './views/exploer/fileExplorer';
+import { TestViewDragAndDrop } from './views/exploer/testViewDragAndDrop';
+import { TestView } from './views/exploer/testView';
+import { showQuickPick, showInputBox } from './commands/basicInput';
+import { multiStepInput } from './commands/multiStepInput';
+import { quickOpen } from './commands/quickOpen';
 
-import { HelloWorldPanel } from "./panels/HelloWorldPanel";
+import { HelloWorldPanel } from "./views/webview/HelloWorldPanel";
 
 
 // This method is called when your extension is activated
@@ -47,6 +50,26 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	});
 	
 	vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
+	
+	context.subscriptions.push(vscode.commands.registerCommand('samples.quickInput', async () => {
+		const options: { [key: string]: (context: vscode.ExtensionContext) => Promise<void> } = {
+			showQuickPick,
+			showInputBox,
+			multiStepInput,
+			quickOpen,
+		};
+		const quickPick = vscode.window.createQuickPick();
+		quickPick.items = Object.keys(options).map(label => ({ label }));
+		quickPick.onDidChangeSelection(selection => {
+			if (selection[0]) {
+				options[selection[0].label](context)
+					.catch(console.error);
+			}
+		});
+		quickPick.onDidHide(() => quickPick.dispose());
+		quickPick.show();
+	}));
+
 
 	// Samples of `window.createView`
 	new FtpExplorer(context);
@@ -71,6 +94,29 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	});
 
 	context.subscriptions.push(disposable);
+
+	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.runCommand', async () => {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		vscode.commands.executeCommand('getting-started-sample.sayHello', vscode.Uri.joinPath(context.extensionUri, 'sample-folder'));
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.changeSetting', async () => {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		vscode.workspace.getConfiguration('getting-started-sample').update('sampleSetting', true);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.setContext', async () => {
+		await new Promise(resolve => setTimeout(resolve, 1000));
+		vscode.commands.executeCommand('setContext', 'gettingStartedContextKey', true);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.sayHello', () => {
+		vscode.window.showInformationMessage('Hello');
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.viewSources', () => {
+		return { openFolder: vscode.Uri.joinPath(context.extensionUri, 'src') };
+	}));
 }
 
 // This method is called when your extension is deactivated

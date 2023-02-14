@@ -4,13 +4,16 @@ exports.deactivate = exports.activate = void 0;
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
-const nodeDependencies_1 = require("./nodeDependencies");
-const jsonOutline_1 = require("./jsonOutline");
-const ftpExplorer_1 = require("./ftpExplorer");
-const fileExplorer_1 = require("./fileExplorer");
-const testViewDragAndDrop_1 = require("./testViewDragAndDrop");
-const testView_1 = require("./testView");
-const HelloWorldPanel_1 = require("./panels/HelloWorldPanel");
+const nodeDependencies_1 = require("./views/exploer/nodeDependencies");
+const jsonOutline_1 = require("./views/exploer/jsonOutline");
+const ftpExplorer_1 = require("./views/exploer/ftpExplorer");
+const fileExplorer_1 = require("./views/exploer/fileExplorer");
+const testViewDragAndDrop_1 = require("./views/exploer/testViewDragAndDrop");
+const testView_1 = require("./views/exploer/testView");
+const basicInput_1 = require("./commands/basicInput");
+const multiStepInput_1 = require("./commands/multiStepInput");
+const quickOpen_1 = require("./commands/quickOpen");
+const HelloWorldPanel_1 = require("./views/webview/HelloWorldPanel");
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -44,6 +47,24 @@ function activate(context) {
         }
     });
     vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
+    context.subscriptions.push(vscode.commands.registerCommand('samples.quickInput', async () => {
+        const options = {
+            showQuickPick: basicInput_1.showQuickPick,
+            showInputBox: basicInput_1.showInputBox,
+            multiStepInput: multiStepInput_1.multiStepInput,
+            quickOpen: quickOpen_1.quickOpen,
+        };
+        const quickPick = vscode.window.createQuickPick();
+        quickPick.items = Object.keys(options).map(label => ({ label }));
+        quickPick.onDidChangeSelection(selection => {
+            if (selection[0]) {
+                options[selection[0].label](context)
+                    .catch(console.error);
+            }
+        });
+        quickPick.onDidHide(() => quickPick.dispose());
+        quickPick.show();
+    }));
     // Samples of `window.createView`
     new ftpExplorer_1.FtpExplorer(context);
     new fileExplorer_1.FileExplorer(context);
@@ -64,6 +85,24 @@ function activate(context) {
         HelloWorldPanel_1.HelloWorldPanel.render(context.extensionUri);
     });
     context.subscriptions.push(disposable);
+    context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.runCommand', async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        vscode.commands.executeCommand('getting-started-sample.sayHello', vscode.Uri.joinPath(context.extensionUri, 'sample-folder'));
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.changeSetting', async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        vscode.workspace.getConfiguration('getting-started-sample').update('sampleSetting', true);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.setContext', async () => {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        vscode.commands.executeCommand('setContext', 'gettingStartedContextKey', true);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.sayHello', () => {
+        vscode.window.showInformationMessage('Hello');
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.viewSources', () => {
+        return { openFolder: vscode.Uri.joinPath(context.extensionUri, 'src') };
+    }));
 }
 exports.activate = activate;
 // This method is called when your extension is deactivated

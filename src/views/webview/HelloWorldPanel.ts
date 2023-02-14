@@ -1,6 +1,6 @@
 
 import * as vscode from "vscode";
-import { getUri } from "../utilities/getUri";
+import { getUri } from "../../utils/getUri";
 
 // panel class
 export class HelloWorldPanel {
