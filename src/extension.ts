@@ -7,6 +7,7 @@ import * as vscode from 'vscode';
 //import { FtpExplorer } from './views/exploer/ftpExplorer';
 //import { FileExplorer } from './views/exploer/fileExplorer';
 import { SqlconfigExplorer } from './views/explorer/sqlconfigExplorer';
+import { SqlmapDataExplorer,Dependency } from './views/explorer/sqlmapDataExplorer';
 import { TestViewDragAndDrop } from './views/explorer/testViewDragAndDrop';
 import { TestView } from './views/explorer/testView';
 import { showQuickPick, showInputBox } from './commands/basicInput';
@@ -28,11 +29,17 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 		// Samples of `window.registerTreeDataProvider`
 	// const nodeDependenciesProvider = new DepNodeProvider(rootPath);
 	// vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
-	// vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
-	// vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
-	// vscode.commands.registerCommand('nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
-	// vscode.commands.registerCommand('nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
-	// vscode.commands.registerCommand('nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
+
+	const sqlmapProvider = new SqlmapDataExplorer(rootPath);
+	vscode.window.registerTreeDataProvider('sqlmapExplorer',sqlmapProvider);
+	// vscode.window.createTreeView('sqlmapExplorer',{
+	// 	treeDataProvider: new SqlmapDataExplorer(rootPath)
+	// });
+	vscode.commands.registerCommand('sqlmapExplorer.refreshEntry', () => sqlmapProvider.refresh());
+	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
+	vscode.commands.registerCommand('sqlmapExplorer.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
+	vscode.commands.registerCommand('sqlmapExplorer.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
+	vscode.commands.registerCommand('sqlmapExplorer.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
 
 	// const jsonOutlineProvider = new JsonOutlineProvider(context);
 	// vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
@@ -76,6 +83,8 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	// new FtpExplorer(context);
 	// new FileExplorer(context);
 	new SqlconfigExplorer(context);
+	
+
 	// Test View
 	new TestView(context);
 
