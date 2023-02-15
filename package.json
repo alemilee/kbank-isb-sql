@@ -185,24 +185,16 @@
     },
     "views": {
       "package-explorer": [
-        {
-          "id": "nodeDependencies",
-          "name": "Node Dependencies",
-          "icon": "resources/media/dep.svg",
-          "contextualTitle": "Package Explorer"
-        },
+
 		{
-			"id": "jsonOutline",
-			"name": "Json Outline",
-			"when": "jsonOutlineEnabled"
+			"type": "webview",
+			"id": "sqlconfigExplorer",
+			"name": "Sql Config Explorer"
 		},
 		{
-			"id": "ftpExplorer",
-			"name": "FTP Explorer"
-		},
-		{
-			"id": "fileExplorer",
-			"name": "File Explorer"
+			
+			"id": "sqlmapExplorer",
+			"name": "Sql Namespace Explorer"
 		}
       ],
       "explorer": [

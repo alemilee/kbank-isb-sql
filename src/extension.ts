@@ -2,12 +2,13 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import { DepNodeProvider, Dependency } from './views/exploer/nodeDependencies';
-import { JsonOutlineProvider } from './views/exploer/jsonOutline';
-import { FtpExplorer } from './views/exploer/ftpExplorer';
-import { FileExplorer } from './views/exploer/fileExplorer';
-import { TestViewDragAndDrop } from './views/exploer/testViewDragAndDrop';
-import { TestView } from './views/exploer/testView';
+//import { DepNodeProvider, Dependency } from './views/exploer/nodeDependencies';
+//import { JsonOutlineProvider } from './views/exploer/jsonOutline';
+//import { FtpExplorer } from './views/exploer/ftpExplorer';
+//import { FileExplorer } from './views/exploer/fileExplorer';
+import { SqlconfigExplorer } from './views/explorer/sqlconfigExplorer';
+import { TestViewDragAndDrop } from './views/explorer/testViewDragAndDrop';
+import { TestView } from './views/explorer/testView';
 import { showQuickPick, showInputBox } from './commands/basicInput';
 import { multiStepInput } from './commands/multiStepInput';
 import { quickOpen } from './commands/quickOpen';
@@ -25,31 +26,31 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	console.log('Congratulations, your extension "kbank-isb-sql" is now active!');
 
 		// Samples of `window.registerTreeDataProvider`
-	const nodeDependenciesProvider = new DepNodeProvider(rootPath);
-	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
-	vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
-	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
-	vscode.commands.registerCommand('nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
-	vscode.commands.registerCommand('nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
-	vscode.commands.registerCommand('nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
+	// const nodeDependenciesProvider = new DepNodeProvider(rootPath);
+	// vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
+	// vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
+	// vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
+	// vscode.commands.registerCommand('nodeDependencies.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
+	// vscode.commands.registerCommand('nodeDependencies.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
+	// vscode.commands.registerCommand('nodeDependencies.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
 
-	const jsonOutlineProvider = new JsonOutlineProvider(context);
-	vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
-	vscode.commands.registerCommand('jsonOutline.refresh', () => jsonOutlineProvider.refresh());
-	vscode.commands.registerCommand('jsonOutline.refreshNode', offset => jsonOutlineProvider.refresh(offset));
-	vscode.commands.registerCommand('jsonOutline.renameNode', args => {
-		let offset = undefined;
-		if (args.selectedTreeItems && args.selectedTreeItems.length) {
-			offset = args.selectedTreeItems[0];
-		} else if (typeof args === 'number') {
-			offset = args;
-		}
-		if (offset) {
-			jsonOutlineProvider.rename(offset);
-		}
-	});
+	// const jsonOutlineProvider = new JsonOutlineProvider(context);
+	// vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
+	// vscode.commands.registerCommand('jsonOutline.refresh', () => jsonOutlineProvider.refresh());
+	// vscode.commands.registerCommand('jsonOutline.refreshNode', offset => jsonOutlineProvider.refresh(offset));
+	// vscode.commands.registerCommand('jsonOutline.renameNode', args => {
+	// 	let offset = undefined;
+	// 	if (args.selectedTreeItems && args.selectedTreeItems.length) {
+	// 		offset = args.selectedTreeItems[0];
+	// 	} else if (typeof args === 'number') {
+	// 		offset = args;
+	// 	}
+	// 	if (offset) {
+	// 		jsonOutlineProvider.rename(offset);
+	// 	}
+	// });
 	
-	vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
+	// vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
 	
 	context.subscriptions.push(vscode.commands.registerCommand('samples.quickInput', async () => {
 		const options: { [key: string]: (context: vscode.ExtensionContext) => Promise<void> } = {
@@ -72,8 +73,9 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 
 
 	// Samples of `window.createView`
-	new FtpExplorer(context);
-	new FileExplorer(context);
+	// new FtpExplorer(context);
+	// new FileExplorer(context);
+	new SqlconfigExplorer(context);
 	// Test View
 	new TestView(context);
 
