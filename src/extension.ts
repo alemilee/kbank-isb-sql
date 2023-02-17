@@ -6,8 +6,6 @@ import * as vscode from 'vscode';
 //import { JsonOutlineProvider } from './views/exploer/jsonOutline';
 //import { FtpExplorer } from './views/exploer/ftpExplorer';
 //import { FileExplorer } from './views/exploer/fileExplorer';
-import { SqlconfigExplorer } from './views/explorer/sqlconfigExplorer';
-import { SqlmapDataExplorer,Dependency } from './views/explorer/sqlmapDataExplorer';
 import { TestViewDragAndDrop } from './views/explorer/testViewDragAndDrop';
 import { TestView } from './views/explorer/testView';
 import { showQuickPick, showInputBox } from './commands/basicInput';
@@ -16,6 +14,11 @@ import { quickOpen } from './commands/quickOpen';
 
 import { HelloWorldPanel } from "./views/webview/HelloWorldPanel";
 
+
+//ALEMI, import 추가
+import { SqlconfigExplorer } from './views/explorer/sqlconfigExplorer';
+import { SqlmapDataExplorer,Dependency } from './views/explorer/sqlmapDataExplorer';
+//ALEMI, END
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -30,16 +33,24 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	// const nodeDependenciesProvider = new DepNodeProvider(rootPath);
 	// vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
 
-	const sqlmapProvider = new SqlmapDataExplorer(rootPath);
-	vscode.window.registerTreeDataProvider('sqlmapExplorer',sqlmapProvider);
+
+	// ALMEI, SQL MAP PROVIDER(TreeView) 추가 
+	const sqlmapProvider = new SqlmapDataExplorer(rootPath); //implements vscode.TreeDataProvider <- Provider 임. class명 변경할까.. ?
+	vscode.window.registerTreeDataProvider('sqlmapExplorer',sqlmapProvider); //viewID:sqlmapExplorer
 	// vscode.window.createTreeView('sqlmapExplorer',{
 	// 	treeDataProvider: new SqlmapDataExplorer(rootPath)
 	// });
-	vscode.commands.registerCommand('sqlmapExplorer.refreshEntry', () => sqlmapProvider.refresh());
+	context.subscriptions.push(
+		vscode.commands.registerCommand('sqlmapExplorer.refreshEntry', () => {
+			sqlmapProvider.refresh();
+	}));
+	//vscode.commands.registerCommand('sqlmapExplorer.refreshEntry', () => sqlmapProvider.refresh());
 	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`)));
 	vscode.commands.registerCommand('sqlmapExplorer.addEntry', () => vscode.window.showInformationMessage(`Successfully called add entry.`));
 	vscode.commands.registerCommand('sqlmapExplorer.editEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called edit entry on ${node.label}.`));
 	vscode.commands.registerCommand('sqlmapExplorer.deleteEntry', (node: Dependency) => vscode.window.showInformationMessage(`Successfully called delete entry on ${node.label}.`));
+	vscode.commands.registerCommand('sqlmapExplorer.delEntry', () => vscode.window.showInformationMessage(`Successfully called delete NameSpace.`));
+	// ALMEI, SQL MAP PROVIDER 끝
 
 	// const jsonOutlineProvider = new JsonOutlineProvider(context);
 	// vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
@@ -82,11 +93,11 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	// Samples of `window.createView`
 	// new FtpExplorer(context);
 	// new FileExplorer(context);
-	new SqlconfigExplorer(context);
-	
-
 	// Test View
 	new TestView(context);
+
+	// ALEMI, SQL CONFIG PROVIER 추가
+	new SqlconfigExplorer(context);//끝
 
 	// Drag and Drop proposed API sample
 	// This check is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
