@@ -232,18 +232,18 @@
       {
         "command": "sqlmapExplorer.addEntry",
         "title": "Add Namespace",
-		"icon": {
-			"light": "resources/light/plus.svg",
-			"dark": "resources/dark/plus.svg"
-		  }
+        "icon": {
+          "light": "resources/light/plus.svg",
+          "dark": "resources/dark/plus.svg"
+        }
       },
-	  {
+      {
         "command": "sqlmapExplorer.delEntry",
         "title": "Delete Namespace",
-		"icon": {
-			"light": "resources/light/minus.svg",
-			"dark": "resources/dark/minus.svg"
-		  }
+        "icon": {
+          "light": "resources/light/minus.svg",
+          "dark": "resources/dark/minus.svg"
+        }
       },
       {
         "command": "sqlmapExplorer.editEntry",
@@ -338,13 +338,13 @@
         {
           "command": "sqlmapExplorer.addEntry",
           "when": "view == sqlmapExplorer",
-		  "group": "navigation"
+          "group": "navigation"
         },
-		{
-			"command": "sqlmapExplorer.delEntry",
-			"when": "view == sqlmapExplorer",
-			"group": "navigation"
-		},
+        {
+          "command": "sqlmapExplorer.delEntry",
+          "when": "view == sqlmapExplorer",
+          "group": "navigation"
+        },
         {
           "command": "jsonOutline.refresh",
           "when": "view == jsonOutline",
@@ -399,9 +399,10 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run package",
+    "compile": "node ./esbuild.js",
+    "package": "NODE_ENV=production node ./esbuild.js",
+    "watch": "node ./esbuild.js --watch",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
@@ -413,10 +414,11 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^16.18.12",
     "@types/rimraf": "^2.0.2",
-    "@types/vscode": "^1.75.0",
+    "@types/vscode": "^1.75.1",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
     "@vscode/test-electron": "^2.2.2",
+    "esbuild": "^0.16.17",
     "eslint": "^8.33.0",
     "glob": "^8.1.0",
     "mocha": "^10.1.0",

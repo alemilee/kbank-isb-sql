@@ -2,11 +2,10 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const jsonFilePath = path.join(__dirname, 'sampleData.json');
-const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
-const data = JSON.parse(jsonData);
+// const jsonFilePath = path.join(__dirname, 'sampleData.json');
+// const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
+// const data = JSON.parse(jsonData);
 
-console.log(data);
 
 export class SqlmapDataExplorer implements vscode.TreeDataProvider<Dependency> {
 

@@ -18,6 +18,7 @@ import { HelloWorldPanel } from "./views/webview/HelloWorldPanel";
 //ALEMI, import 추가
 import { SqlconfigExplorer } from './views/explorer/sqlconfigExplorer';
 import { SqlmapDataExplorer,Dependency } from './views/explorer/sqlmapDataExplorer';
+
 //ALEMI, END
 
 // This method is called when your extension is activated
@@ -97,7 +98,10 @@ const rootPath = (vscode.workspace.workspaceFolders && (vscode.workspace.workspa
 	new TestView(context);
 
 	// ALEMI, SQL CONFIG PROVIER 추가
+	console.log("====> extension.ts: new SqlconfigExplorer(context) <==== ");
 	new SqlconfigExplorer(context);//끝
+	console.log("====> extension.ts: new SqlconfigExplorer ENDDDDDD <==== ");
+
 
 	// Drag and Drop proposed API sample
 	// This check is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
